@@ -1,0 +1,46 @@
+{% extends "order_display/base.html" %}
+{% block title %}Lista zamówień{% endblock %}
+
+{% block content %}
+<div class="event-schedule-area-two bg-color pad100">
+  <div class="container">
+      <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade active show" id="home" role="tabpanel">
+              <div class="table-responsive">
+                  <table class="table">
+                    <a href = "{% url 'order_display:new_order' %}"><button class="btn btn-success float-right">nowe zamówienie</button></a>
+                    {% for order in orders %}
+                      <tr class="inner-box">
+                          <th scope="row">
+                              <div class="event-date">
+                                  {{order.due}}
+                              </div>
+                          </th>
+                          <td>
+                              <div class="event-wrap">
+                                  <h3><a>{{ order.client }}</a></h3>
+                                  <div class="meta">
+                                      <div class="organizers">
+                                          <a>{{order.adres}}</a>
+                                      </div>
+                                      <div class="categories">
+                                          <a>{{order.status}}</a>
+                                      </div>
+                                  </div>
+                              </div>
+                          </td>
+                          <td>
+                              <div class="primary-btn">
+                                  <a class="btn btn-primary" href={% url 'order_display:order_detail' order.slug %}>Szczegóły</a>
+                              </div>
+                          </td>
+                      </tr>
+                      {% endfor %}
+                  </table>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,41 @@
+
+{% comment %} 
+  <div class="dropdown">
+    <input class="form-control mr-sm-2 dropdown-toggle" type="search" placeholder="Search" aria-label="Search" id='searchbar'>
+    <ul class="list-group" id = "dropdown">
+      
+    </ul>
+
+  </div>
+
+   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script>
+  $(document).ready(function(){
+    setInterval(function(){
+      search = document.getElementById('searchbar').value;
+      if(search.length!=0){
+        $.ajax({
+          type:'GET',
+          url:"{% url 'order_display:show_searches' %}",
+          data: {"search":search},
+          success: function(response){
+            $("#dropdown").empty();
+            for(var key in response.searches){
+              console.log(response.searches[key].first_name);
+              var temp = `<li class="list-group-item"> <a href = '${response.searches[key].slug}'>${response.searches[key].first_name} ${response.searches[key].last_name} </a></li>`;
+              $("#dropdown").append(temp);
+            }
+          },
+          error: function(response){
+            console.log("huj");
+          },
+        });
+      }
+      else{
+        $("#dropdown").empty();
+      }
+    },1000);
+  });
+</script> {% endcomment %}
+

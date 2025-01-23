@@ -1,0 +1,63 @@
+{% extends "order_display/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Szczegóły zamówienia{% endblock %}
+{% block content %}
+
+
+
+  <section class="vh-100" style="background-color: #eee;">
+    <div id='order_info'>
+    <tr class="inner-box">
+      <th scope="row">
+          <div class="event-date">
+              {{order.due}}
+          </div>
+      </th>
+      <td>
+          <div class="event-wrap">
+              <h3><a>{{ order.client }}</a></h3>
+              <div class="meta">
+                  <div class="organizers">
+                      <a>{{order.adres}}</a>
+                  </div>
+                  <div class="categories">
+                      <a>{{order.status}}</a>
+                  </div>
+              </div>
+          </div>
+      </td>
+    </div>
+    <div class="container py-5 h-100">
+      <div style="margin-left: auto; margin-right: auto; width: fit-content;">
+    </div>
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-lg-9 col-xl-7">
+          <div class="card rounded-3">
+            <div class="card-body p-4">
+              <h4 class="text-center my-3 pb-3">Elementy</h4>
+              <table class="table mb-0">
+                <tbody>
+                  {% for element in elements %}
+                  <tr>
+                    {% if element.status == element.Status.IN_PROGRESS %}
+                      <td>{{element.name}}</td>
+                      <td>{{element.width}}x{{element.height}}x{{element.length}}</td>
+                      <td>{{element.volume}}m3</td>
+                    {% endif %}
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+  {% comment %}  {% endcomment %}
+{% endblock %}
+
+
+
+

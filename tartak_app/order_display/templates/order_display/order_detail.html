@@ -1,0 +1,105 @@
+{% extends "order_display/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Szczegóły zamówienia{% endblock %}
+{% block content %}
+
+
+
+  <section class="vh-100" style="background-color: #eee;">
+    <div id='order_info'>
+    <tr class="inner-box">
+      <th scope="row">
+          <div class="event-date">
+              {{order.due}}
+          </div>
+      </th>
+      <td>
+          <div class="event-wrap">
+              <h3><a>{{ order.client }}</a></h3>
+              <div class="meta">
+                  <div class="organizers">
+                      <a>{{order.adres}}</a>
+                  </div>
+                  <div class="categories">
+                      <a>{{order.status}}</a>
+                  </div>
+              </div>
+          </div>
+      </td>
+    </div>
+    <div class="container py-5 h-100">
+      <div style="margin-left: auto; margin-right: auto; width: fit-content;">
+        <button id="show_order_form" class='btn btn-primary'>Edytuj szczegóły zamówienia</button>
+        <div id='order_form' style="display: none;">
+            <form method="post">
+                {% csrf_token %}
+                {% crispy order_form %}
+                <input type=Submit>
+            </form>
+        </div><br>
+    </div>
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-lg-9 col-xl-7">
+          <div class="card rounded-3">
+            <div class="card-body p-4">
+              <h4 class="text-center my-3 pb-3">Elementy</h4>
+              <table class="table mb-0">
+                <tbody>
+                  {% for element in elements %}
+                  <tr>
+                    <td>{{element.name}}</td>
+                    <td>{{element.width}}x{{element.height}}x{{element.length}}</td>
+                    <td>{{element.volume}}m3</td>
+                    <td class = 'float-right'>
+                      {% if element.status == element.Status.IN_PROGRESS %}
+                        <a href = "{% url 'order_display:element_edit' element.slug %}"><button class="btn btn-warning float-right">Edytuj</button></a>
+                        <a href = "{% url 'order_display:finnish_element' element.slug %}"><button class="btn btn-danger float-right">Zakończ</button></a>
+                      {% else %}
+                        <a href = "{% url 'order_display:finnish_element' element.slug %}"><button class="btn btn-secondary float-right">Cofnij zakończenie</button></a>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <button id="show_element_form" class='btn btn-primary'>dodaj element</button>
+                  <div id = "new_element_form" style="display:none;">
+                  <form method="post">
+                      {% csrf_token %}
+                      {% crispy element_form %}
+                  </form>
+                  </div>
+            </div>
+          </div>
+          <td class = 'float-right'>
+            {% if order.status == order.Status.PUBLISHED %}
+              <a href = "{% url 'order_display:finnish_order' order.slug %}"><button class="btn btn-danger float-right">Zakończ zamówienie</button></a>
+            {% else %}
+              <a href = "{% url 'order_display:finnish_order' order.slug %}"><button class="btn btn-secondary float-right">Cofnij zakończenie zamówienia</button></a>
+            {% endif %}
+          </td>
+        </div>
+      </div>
+    </div>
+
+  </section>
+  {% comment %}  {% endcomment %}
+<script>
+    document.getElementById("show_order_form").onclick = function() {show_order_form()};
+    function show_order_form() {     
+        document.getElementById("order_form").style.display = "block";
+        document.getElementById("show_order_form").style.display = "none";
+        document.getElementById("order_info").style.display = "none";
+    }
+    document.getElementById("show_element_form").onclick = function() {show_element_form()};
+    function show_element_form() {
+        document.getElementById("new_element_form").style.display = "block";
+        document.getElementById("show_element_form").style.display = "none";
+    }
+</script>
+
+{% endblock %}
+
+
+
+

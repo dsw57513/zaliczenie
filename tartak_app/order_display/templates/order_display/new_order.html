@@ -1,0 +1,53 @@
+{% extends "order_display/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Nowe zamówienie{% endblock %}
+{% block content %}
+
+<form method="POST"  autocomplete="off">
+    {% csrf_token %}
+    {% crispy client_form %}
+    {% crispy form %}
+    <input type="Submit">
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script>
+  function chose_client(first_name, last_name, phone_number){
+    document.getElementById('id_first_name').value = first_name;
+    document.getElementById('client_last_name').value = last_name;
+    document.getElementById('client_phone_number').value = phone_number;
+    return(0);
+  }
+  $(document).ready(function(){
+    $("#client_searches_div").append('<ul class="list-group position-absolute z-3" id = "client_searches"></ul>');
+    setInterval(function(){
+      search = document.getElementById('id_first_name').value;
+      console.log(search)
+      if(search.length!=0){
+        $.ajax({
+          type:'GET',
+          url:"{% url 'order_display:show_searches' %}",
+          data: {"search":search},
+          success: function(response){
+            $("#client_searches").empty();
+            for(var key in response.searches){
+              console.log(response.searches[key].first_name);
+              var temp = `<button type="button" onclick="chose_client('${response.searches[key].first_name}', '${response.searches[key].last_name}', ${response.searches[key].phone_number})"><li class="list-group-item" style="z-index: 999;"> ${response.searches[key].first_name} ${response.searches[key].last_name} </li></button>`;
+              $("#client_searches").append(temp);
+            }
+          },
+          error: function(response){
+            console.log("nie działa");
+          },
+        });
+      }
+      else{
+        $("#client_searches").empty();
+      }
+    },1000);
+  });
+
+</script>
+
+
+{%endblock content%}

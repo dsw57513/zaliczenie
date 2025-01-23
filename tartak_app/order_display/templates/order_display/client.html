@@ -1,0 +1,61 @@
+{% extends "order_display/base.html" %}
+{% block title %}Lista zamówień{% endblock %}
+
+{% block content %}
+<div class="event-schedule-area-two bg-color pad100">
+    <div id='order_info'>
+        <tr class="inner-box">
+          <th scope="row">
+          </th>
+          <td>
+              <div class="event-wrap">
+                  <h3><a>{{ client.first_name }} {{client.last_name}}</a></h3>
+                  <div class="meta">
+                      <div class="organizers">
+                          <a>tel. {{client.phone_number}}</a>
+                      </div>
+                  </div>
+              </div>
+          </td>
+        </tr>
+        </div>
+  <div class="container">
+      <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade active show" id="home" role="tabpanel">
+              <div class="table-responsive">
+                  <table class="table">
+                    {% for order in orders %}
+                      <tr class="inner-box">
+                          <th scope="row">
+                              <div class="event-date">
+                                  {{order.due}}
+                              </div>
+                          </th>
+                          <td>
+                              <div class="event-wrap">
+                                  <h3><a>{{ order.client }}</a></h3>
+                                  <div class="meta">
+                                      <div class="organizers">
+                                          <a>{{order.adres}}</a>
+                                      </div>
+                                      <div class="categories">
+                                          <a>{{order.status}}</a>
+                                      </div>
+                                  </div>
+                              </div>
+                          </td>
+                          <td>
+                              <div class="primary-btn">
+                                  <a class="btn btn-primary" href={% url 'order_display:order_detail' order.slug %}>Szczegóły</a>
+                              </div>
+                          </td>
+                      </tr>
+                      {% endfor %}
+                  </table>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+{% endblock %}

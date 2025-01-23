@@ -1,0 +1,9 @@
+{% extends "order_display/base.html" %}
+{% load crispy_forms_tags %}
+dupsko ehhe
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {% crispy login_form %}
+    </form>
+{% endblock content %}
